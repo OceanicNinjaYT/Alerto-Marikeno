@@ -1,0 +1,8 @@
+<resources>
+  <string name="app_name">Alerto-Marikeno</string>
+  <string name="expo_splash_screen_resize_mode" translatable="false">contain</string>
+  <string name="expo_splash_screen_status_bar_translucent" translatable="false">false</string>
+  <string name="facebook_app_id">1348490323591424</string>
+  <string name="facebook_client_token">45b7845706e69466498505ec2709e8dc</string>
+  <string name="fb_login_protocol_scheme">fb1348490323591424</string>
+</resources>
