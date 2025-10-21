@@ -6,7 +6,7 @@ export function mockFetch(endpoint) {
         resolve([  
           { //example post no.1
             id: "1234567890_54321",
-            message: "We're launching our new app today! 🎉 Stay safe and stay alert, Marikeño!",
+            message: "We're launching our new app today! 🎉 Stay safe, Marikeño!",
             created_time: "2025-10-21T10:00:00+0000",
             permalink_url: "https://www.facebook.com/AlertoMarikeno/posts/54321",
             from: {
