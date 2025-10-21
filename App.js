@@ -9,34 +9,83 @@ import {
   Image,
   ActivityIndicator 
 } from "react-native";
-import { mockFetch } from "./mockApi"; // 👈 import fake API
+import { mockFetch } from "./mockApi"; //fake api
 
 export default function App() {
-  const [articles, setArticles] = useState([]); // 👈 Fixed: Changed from 'user' to 'articles'
-  const [loading, setLoading] = useState(true); // 👈 Added missing loading state
+  const [articles, setArticles] = useState([]); 
+  const [loading, setLoading] = useState(true); 
+  const [input, setInput] = useState("");
+  const [result, setResult] = useState(null);
 
   useEffect(() => {
-    mockFetch("/page/post")
-      .then(data => {
-        // Transform all posts into articles
-        const transformedArticles = data.map(post => ({
-          id: post.id,
-          title: post.from.name,
-          description: post.message,
-          image: post.attachments?.data[0]?.media?.image?.src || 'https://via.placeholder.com/800x400',
-          time: new Date(post.created_time).toLocaleDateString(),
-          category: 'News',
-          url: post.permalink_url
-        }));
-        
-        setArticles(transformedArticles);
-        setLoading(false);
-      })
-      .catch(err => {
-        console.error(err);
-        setLoading(false);
-      });
-  }, []);
+  (async () => {
+    try {
+      const data = await mockFetch("/page/post");
+
+      const transformedArticles = data.map(post => ({
+        id: post.id,
+        title: post.from.name,
+        description: post.message,
+        image: post.attachments?.data[0]?.media?.image?.src || 'https://via.placeholder.com/800x400',
+        time: new Date(post.created_time).toLocaleDateString(),
+        category: 'News',
+        url: post.permalink_url
+      }));
+
+      const filtered = [];
+      for (const article of transformedArticles) {
+        const hasKeywords = await areKeywordsFound(article.description); // ✅ await here
+        if (hasKeywords) filtered.push(article);
+      }
+
+      setArticles(filtered);
+      setLoading(false);
+    } catch (err) {
+      console.error(err);
+      setLoading(false);
+    }
+  })();
+}, []);
+
+
+  const analyzeText = async (text) => {
+    try {
+      const response = await fetch(
+        "https://keywordfinder-301895518339.asia-southeast1.run.app/analyze",
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ text: input }),
+        }
+      );
+
+      const data = await response.json();
+      setResult(data); // ✅ store the response
+    } catch (error) {
+      console.error("❌ Error:", error);
+    }
+  };
+
+  const areKeywordsFound = async (text) => {
+  try {
+    const response = await fetch(
+      "https://keywordfinder-301895518339.asia-southeast1.run.app/analyze",
+      {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ text }), 
+      }
+    );
+    console.log("Connected to JAVA BACKEND")
+    const data = await response.json();
+
+    return data.count > 0; //
+  } catch (error) {
+    console.error("❌ Error:", error);
+    return false;
+  }
+  };
+
 
   return (
     <View style={styles.container}>
@@ -58,7 +107,7 @@ export default function App() {
             <Text style={styles.loadingText}>Loading news...</Text>
           </View>
         ) : (
-          articles.map((article) => (
+          articles.map((article) => ( //loop/iterate the elements through the map
             <TouchableOpacity
               key={article.id}
               style={styles.articleCard}

@@ -1,9 +1,9 @@
 export function mockFetch(endpoint) {
   return new Promise((resolve, reject) => {
-    console.log(`Simulating fetch to ${endpoint}...`); // 👈 Fixed: Added backticks
+    console.log(`Simulating fetch to ${endpoint}...`); 
     setTimeout(() => {
       if (endpoint === "/page/post") {
-        resolve([  // 👈 Changed to array for multiple posts
+        resolve([  
           {
             id: "1234567890_54321",
             message: "We're launching our new app today! 🎉 Stay safe and stay alert, Marikeño!",
