@@ -24,33 +24,51 @@ public class keywordFinder {
       String text = body.getOrDefault("text", "").toLowerCase();
 
       // Keywords to detect
-      List<String> keywords = Arrays.asList(
-        "flood", 
-        "rain",
-        "earthquake", 
-        "storm", 
-        "evacuation", 
-        "alert", 
-        "alarm", 
-        "state of calamity", 
-        "alarm level 1",
-        "alarm level 2",
-        "alarm level 3",
-        "emergency"
-      );
-
-      List<String> found = new ArrayList<>();
-
+        List<String> keywords = Arrays.asList(
+            "flood", 
+            "rain",
+            "earthquake", 
+            "storm", 
+            "evacuation", 
+            "alert", 
+            "alarm", 
+            "state of calamity", 
+            "alarm level 1",
+            "alarm level 2",
+            "alarm level 3",
+            "first alarm",
+            "second alarm",
+            "third alarm",
+            "emergency"
+        );
+        List<String> priorityKeywords = Arrays.asList(
+            "state of calamity",
+            "first alarm",
+            "second alarm",
+            "third alarm",
+            "alarm level 1",
+            "alarm level 2",
+            "alarm level 3",
+            "emergency"
+        );
+        List<String> found = new ArrayList<>();
       for (String kw : keywords) {
         if (text.contains(kw)) {
           found.add(kw);
         }
       }
+        List<String> priorityFound = new ArrayList<>();
+        for (String pkw : priorityKeywords)
+        if (text.contains(pkw)) {
+            priorityFound.add(pkw);
+        }
 
       Map<String, Object> result = new HashMap<>();
       result.put("original_text", text);
       result.put("keywords_found", found);
+      result.put("priority_keywords_found", priorityFound);
       result.put("count", found.size());
+      result.put("priority_keyword_count", priorityFound.size());
 
       return gson.toJson(result);
     });
