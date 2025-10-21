@@ -4,7 +4,7 @@ export function mockFetch(endpoint) {
     setTimeout(() => {
       if (endpoint === "/page/post") {
         resolve([  
-          {
+          { //example post no.1
             id: "1234567890_54321",
             message: "We're launching our new app today! 🎉 Stay safe and stay alert, Marikeño!",
             created_time: "2025-10-21T10:00:00+0000",
@@ -22,7 +22,7 @@ export function mockFetch(endpoint) {
               ],
             },
           },
-          {
+          {  //example post no.2
             id: "1234567890_54322",
             message: "Traffic update: Heavy traffic on Marcos Highway. Please take alternate routes.",
             created_time: "2025-10-20T14:30:00+0000",
@@ -40,7 +40,7 @@ export function mockFetch(endpoint) {
               ],
             },
           },
-          {
+          {  //example post no.3
             id: "1234567890_54323",
             message: "Reminder: Garbage collection schedule for Barangay Santa Elena is every Monday and Thursday.",
             created_time: "2025-10-19T08:00:00+0000",
