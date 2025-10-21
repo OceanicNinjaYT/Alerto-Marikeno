@@ -34,8 +34,16 @@ export default function App() {
 
       const filtered = [];
       for (const article of transformedArticles) {
-        const hasKeywords = await areKeywordsFound(article.description); // ✅ await here
+        const hasKeywords = await areKeywordsFound(article.description);
+        const hasPriorityKeywords = await arePriorityKeywordsFound(article.description)
+        console.log("Sent to Paraphrasing AI");
+        console.log("Parahrased caption, Changing Value...");
+
         if (hasKeywords) filtered.push(article);
+        console.log("Send Notification to User");
+        if (hasPriorityKeywords) {
+        console.log("🚨!ACTIVATE ARDUINO ALARMS!🚨")
+        }
       }
 
       setArticles(filtered);
@@ -60,9 +68,9 @@ export default function App() {
       );
 
       const data = await response.json();
-      setResult(data); // ✅ store the response
+      setResult(data); 
     } catch (error) {
-      console.error("❌ Error:", error);
+      console.error("Error:", error);
     }
   };
 
@@ -79,9 +87,28 @@ export default function App() {
     console.log("Connected to JAVA BACKEND")
     const data = await response.json();
 
-    return data.count > 0; //
+    return data.count > 0; 
   } catch (error) {
-    console.error("❌ Error:", error);
+    console.error("Error:", error);
+    return false;
+  }
+  };
+  const arePriorityKeywordsFound = async (text) => {
+  try {
+    const response = await fetch(
+      "https://keywordfinder-301895518339.asia-southeast1.run.app/analyze",
+      {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ text }), 
+      }
+    );
+    console.log("Connected to JAVA BACKEND")
+    const data = await response.json();
+
+    return data.priority_keyword_count > 0; 
+  } catch (error) {
+    console.error("Error:", error);
     return false;
   }
   };
